@@ -155,11 +155,11 @@ function OnboardingButton(props) {
   );
 }
 
+    // { location: "n7.dingocoin.org", port: 8443 }, // dead node removed
 function SolController() {
   const AUTHORITY_NODES = [
     { location: "n5.dingocoin.org", port: 8443 },
     { location: "n6.dingocoin.org", port: 8443 },
-    { location: "n7.dingocoin.org", port: 8443 },
     { location: "n8.dingocoin.org", port: 8443 },
     { location: "n9.dingocoin.org", port: 8443 },
     { location: "n10.dingocoin.org", port: 8443 },
