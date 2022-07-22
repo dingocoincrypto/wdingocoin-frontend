@@ -139,7 +139,13 @@ function OnboardingButton(props) {
           ? "Connect Phantom wallet to convert"
           : wallet.publicKey.toBase58()}
       </button>
-      <br />
+      <p className="warning">
+        WARNING:<br />
+        SOL's SPL token is currently experiencing some bugs in minting.<br />
+        Hence, all mints will be suspended until SOL fixes the bug.<br />
+        Please REFRAIN FROM DEPOSITING YOUR DINGOCOINS.<br />
+        If you have deposited Dingocoins but your wDingocoins did not get minted, please contact us on Discord.
+      </p>
       {typeof account !== "undefined" && (
         <button
           className="button button3 mb-4"
