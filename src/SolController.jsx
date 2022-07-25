@@ -142,8 +142,8 @@ function OnboardingButton(props) {
       <p className="warning">
         WARNING:<br />
         SOL's SPL token is currently experiencing some bugs in minting.<br />
-        Hence, all mints will be suspended until SOL fixes the bug.<br />
-        Please REFRAIN FROM DEPOSITING YOUR DINGOCOINS.<br />
+        Hence, all mints will be suspended until SOL fixes the bug.<br /> <br />
+        Please REFRAIN FROM DEPOSITING YOUR DINGOCOINS.<br /> <br />
         If you have deposited Dingocoins but your wDingocoins did not get minted, please contact us on Discord.
       </p>
       {typeof account !== "undefined" && (
