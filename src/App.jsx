@@ -21,6 +21,7 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Maintenance from "./Maintenance";
+import MumbaiController from "./MumbaiController";
 
 export default function App() {
  // GA Analytics, Uncomment below, add your GA Measurement ID 	
@@ -124,22 +125,27 @@ const [controller, setController] = React.useState(null);
               title={
                 controller === null
                   ? "Select Wrapped Network"
-                  : controller === "bsc"
-                  ? "Binance Smart Chain (BSC)"
-                  : "Solana (SOL)"
+                  : controller
               }
               className="mb-2"
             >
               <Dropdown.Item
                 onClick={() => {
-                  setController("bsc");
+                  setController("Binance Smart Chain (BSC)");
                 }}
               >
                 Binance Smart Chain (BSC)
               </Dropdown.Item>
               <Dropdown.Item
                 onClick={() => {
-                  setController("sol");
+                  setController("Mumbai TESTNET");
+                }}
+              >
+                wtDingo (Mumbai)
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  setController("Solana (SOL)");
                 }}
               >
                 Solana (SOL)
@@ -152,8 +158,9 @@ const [controller, setController] = React.useState(null);
       <section>
 		<Container>
 		<h5 className="mt-3 text-center">
-        {controller === "bsc" && <BscController />}
-      	{controller === "sol" && <SolController />}
+        {controller === "Binance Smart Chain (BSC)" && <BscController />}
+        {controller === "Mumbai TESTNET" && <MumbaiController />}
+      	{controller === "Solana (SOL)" && <SolController />}
         </h5>
         </Container>
       </section>
