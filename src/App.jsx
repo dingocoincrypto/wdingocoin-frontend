@@ -171,7 +171,7 @@ export default function App() {
           <section className="section-footer text-center">
             <Row>
               <span>
-                <b>© The Dingocoin Project 2021 - 2022</b> 
+                <b>© The Dingocoin Project 2021 - 2023</b> 
               </span>
             </Row>
           </section>
