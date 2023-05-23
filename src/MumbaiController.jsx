@@ -41,7 +41,7 @@ const isValidDingocoinAddress = (x) => {
   if (raw.length !== 25) {
     return false;
   }
-  if (raw[0] !== 0x16 && raw[0] !== 0x1e) {
+  if (raw[0] !== 0x71 && raw[0] !== 0xc4) {
     return false;
   }
   const checksum = sha256(sha256(raw.slice(0, 21)));
@@ -50,29 +50,24 @@ const isValidDingocoinAddress = (x) => {
 
 const AUTHORITY_NODES = [
   {
-    location: "n0.dingocoin.com",
+    location: "mad1.twinkykms.com",
     port: 8443,
-    walletAddress: "0x0bee89d055Bc18250C71B72B2e24EcF723e9a8ef",
+    walletAddress: "0xb1B323740a8E7D13AF10839b121e22083Da23Ac1",
   },
   {
-    location: "n1.dingocoin.com",
+    location: "mad2.twinkykms.com",
     port: 8443,
-    walletAddress: "0xD14Bc59472b8f1fA5baA99a17855d06aD327dCae",
+    walletAddress: "0x31d75dB9eC7F1aBE2905fb590a4E41401F837C05",
   },
   {
-    location: "n2.dingocoin.com",
+    location: "mad3.twinkykms.com",
     port: 8443,
-    walletAddress: "0x3279f7B244F0194fd359D5AC29359ca676193aDb",
+    walletAddress: "0x9C1844FFD3fb0E2c397D6510d3dCf3E2f77f47A2",
   },
   {
-    location: "n3.dingocoin.com",
+    location: "mad4.twinkykms.com",
     port: 8443,
-    walletAddress: "0x9d046eDc2C80727259355E4CFBb8B72750348Ad9",
-  },
-  {
-    location: "n4.dingocoin.com",
-    port: 8443,
-    walletAddress: "0x5234B6a4df31598dc4B26183ad7C452E47AB267F",
+    walletAddress: "0xb37F35DAfd8E5050CC80D9E262ad0176aD19483D",
   },
 ];
 const AUTHORITY_THRESHOLD = 3;
@@ -80,7 +75,7 @@ const authorityLink = (x) => {
   return `https://${x.location}:${x.port}`;
 };
 
-const CONTRACT_ADDRESS = "0x9b208b117B2C4F76C1534B6f006b033220a681A4";
+const CONTRACT_ADDRESS = "0x42134212af4e5277702da9317a77d7f3db722ba3";
 
 const CONTRACT_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -351,12 +346,38 @@ const CONTRACT_ABI = [
   },
 ];
 
+
 function OnboardingButton(props) {
   const [buttonText, setButtonText] = React.useState(
     "Connect MetaMask wallet to convert"
   );
   const [account, setAccount] = React.useState(null);
   const onboarding = React.useRef();
+
+  React.useEffect(() => {
+    async function checkNetwork() {
+      if (window.ethereum) {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x13881') { // Mumbai Matic Testnet network ID
+          if (window.confirm('WARNING: Metamask is not set to Matic Mumbai Testnet network!')) {
+            try {
+              await window.ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{ chainId: '0x13881' }],
+              });
+              // window.location.reload()
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        }
+      }
+    }
+    //check network in initial load and every 5 seconds after
+    checkNetwork();
+    const checkChainId = setInterval(async() => {checkNetwork()}, 5*1000);
+    return () => clearInterval(checkChainId);
+  }, []);
 
   React.useEffect(() => {
     if (!onboarding.current) {
@@ -398,8 +419,8 @@ function OnboardingButton(props) {
   );
 }
 
-function BscController() {
-  const web3 = new Web3("https://bsc-dataseed.binance.org");
+function MumbaiController() {
+  const web3 = new Web3("https://rpc-mumbai.maticvigil.com");
   const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
   async function post(link, data) {
     const controller = new AbortController();
@@ -423,7 +444,7 @@ function BscController() {
   const randAuthorityLink = () => {
     const node =
       AUTHORITY_NODES[
-        aliveNodes[Math.floor(Math.random() * aliveNodes.length)]
+      aliveNodes[Math.floor(Math.random() * aliveNodes.length)]
       ];
     return `https://${node.location}:${node.port}`;
   };
@@ -524,13 +545,13 @@ function BscController() {
             .then(() => {
               alive.push(parseInt(i));
             })
-            .catch(() => {});
+            .catch(() => { });
         }
         setAliveNodes(alive);
       }
     })();
   });
-
+  
   React.useEffect(() => {
     (async () => {
       if (aliveNodes !== null && stats === null) {
@@ -604,7 +625,7 @@ function BscController() {
           .then((r) => {
             mintTransactionInfos[i] = r.data;
           })
-          .catch(() => {});
+          .catch(() => { });
       })
     );
     const availableMintTransactionInfos = mintTransactionInfos.filter(
@@ -720,7 +741,8 @@ function BscController() {
             className="button button1"
             target="_blank"
             rel="noreferrer"
-            href="https://pancakeswap.finance/swap?outputCurrency=0x9b208b117B2C4F76C1534B6f006b033220a681A4"
+            href="https://dingocoin.com"
+          // href="https://pancakeswap.finance/swap?outputCurrency=0x9b208b117B2C4F76C1534B6f006b033220a681A4"
           >
             Buy wDingocoin (BSC)
           </a>
@@ -728,7 +750,7 @@ function BscController() {
             className="button button1"
             target="_blank"
             rel="noreferrer"
-            href="https://poocoin.app/tokens/0x9b208b117b2c4f76c1534b6f006b033220a681a4"
+            href="https://dingocoin.com"
           >
             wDingocoin (BSC) Price
           </a>
@@ -736,7 +758,7 @@ function BscController() {
             className="button button2"
             target="_blank"
             rel="noreferrer"
-            href={`https://bscscan.com/token/${CONTRACT_ADDRESS}`}
+            href={`https://mumbai.polygonscan.com//token/${CONTRACT_ADDRESS}`}
           >
             wDingocoin (BSC) Contract
           </a>
@@ -752,7 +774,7 @@ function BscController() {
           <OnboardingButton onAccountChange={onAccountChange} />
         </Container>
       </header>
-      <br /> <br />	
+      <br /> <br />
       {wallet && aliveNodes && (
         <div>
           <section className="section-b">
@@ -820,10 +842,10 @@ function BscController() {
                           <td className="short-header">
                             {BigInt(x.mintedAmount) <
                               BigInt(x.depositedAmount) && (
-                              <button onClick={() => onMint(x.depositAddress)}>
-                                Mint balance
-                              </button>
-                            )}
+                                <button onClick={() => onMint(x.depositAddress)}>
+                                  Mint balance
+                                </button>
+                              )}
                           </td>
                         </tr>
                       );
@@ -940,10 +962,10 @@ function BscController() {
                                   {x.status === null
                                     ? "Not submitted"
                                     : x.status === "SUBMITTED"
-                                    ? "Submitted"
-                                    : x.status === "APPROVED"
-                                    ? "Approved"
-                                    : "UNKNOWN"}
+                                      ? "Submitted"
+                                      : x.status === "APPROVED"
+                                        ? "Approved"
+                                        : "UNKNOWN"}
                                 </td>
                                 <td className="short-header">
                                   {x.status !== null ? null : (
@@ -980,7 +1002,7 @@ function BscController() {
 
       <hr />
       <section className="section-a">
-        <h3>BSC Custodian Status</h3> <br />
+        <h3>Mumbai Custodian Status</h3> <br />
         <h5>
           Status of Authority Nodes: <br /> <br />
           {aliveNodes === null && <div className="loader"></div>}
@@ -997,14 +1019,14 @@ function BscController() {
         </h5>
         {aliveNodes !== null && (
           <p> <br />
-          <small>(Nodes not online? Our load protection system was probably triggered
-          by too many of your requests. Please try again in a few minutes.)</small>
+            <small>(Nodes not online? Our load protection system was probably triggered
+              by too many of your requests. Please try again in a few minutes.)</small>
           </p>
         )}
         {aliveNodes !== null && stats === null && (
           <div className="loader"></div>
         )}
-       <br />
+        <br />
         {stats && (
           <div>
             <table>
@@ -1073,4 +1095,4 @@ function BscController() {
   );
 }
 
-export default BscController;
+export default MumbaiController;
