@@ -358,29 +358,29 @@ function OnboardingButton(props) {
   const [account, setAccount] = React.useState(null);
   const onboarding = React.useRef();
 
-  React.useEffect(() => {
-    async function checkNetwork() {
-      if (window.ethereum) {
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        if (chainId !== '0x38') { // bsc network ID
-          if (window.confirm('WARNING: Metamask is not set to the BSC network!')) {
-            try {
-              await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [{ chainId: '0x38' }],
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        }
-      }
-    }
-    //check network in initial load and every 5 seconds after
-    checkNetwork();
-    const checkChainId = setInterval(async() => {checkNetwork()}, 5*1000);
-    return () => clearInterval(checkChainId);
-  }, []);
+  // React.useEffect(() => {
+  //   async function checkNetwork() {
+  //     if (window.ethereum) {
+  //       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+  //       if (chainId !== '0x38') { // bsc network ID
+  //         if (window.confirm('WARNING: Metamask is not set to the BSC network!')) {
+  //           try {
+  //             await window.ethereum.request({
+  //               method: 'wallet_switchEthereumChain',
+  //               params: [{ chainId: '0x38' }],
+  //             });
+  //           } catch (error) {
+  //             console.error(error);
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  //   //check network in initial load and every 5 seconds after
+  //   checkNetwork();
+  //   const checkChainId = setInterval(async() => {checkNetwork()}, 5*1000);
+  //   return () => clearInterval(checkChainId);
+  // }, []);
 
   React.useEffect(() => {
     if (!onboarding.current) {
@@ -619,6 +619,12 @@ function BscController() {
   };
 
   const onMint = async (depositAddress) => {
+    if (window.ethereum) {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId !== '0x38') { // bsc network ID
+        return window.confirm('WARNING: Metamask is not set to the BSC network!')
+      }
+    }
     const mintTransactionInfos = Array(AUTHORITY_NODES.length).fill(undefined);
     await Promise.all(
       AUTHORITY_NODES.map((x, i) => {

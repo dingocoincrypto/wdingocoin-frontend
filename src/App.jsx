@@ -1,6 +1,7 @@
 import "./App.scss";
 import BscController from "./BscController";
 import SolController from "./SolController";
+import MumbaiController from "./MumbaiController";
 import ReactGA from "react-ga";
 
 // Controls.
@@ -21,7 +22,6 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import Maintenance from "./Maintenance";
-import MumbaiController from "./MumbaiController";
 
 export default function App() {
   // GA Analytics, Uncomment below, add your GA Measurement ID 	
