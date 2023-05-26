@@ -619,6 +619,12 @@ function BscController() {
   };
 
   const onMint = async (depositAddress) => {
+    if (window.ethereum) {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId !== '0x38') { // bsc network ID
+        return window.confirm('WARNING: Metamask is not set to the BSC network!')
+      }
+    }
     const mintTransactionInfos = Array(AUTHORITY_NODES.length).fill(undefined);
     await Promise.all(
       AUTHORITY_NODES.map((x, i) => {

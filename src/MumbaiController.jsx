@@ -616,6 +616,12 @@ function MumbaiController() {
   };
 
   const onMint = async (depositAddress) => {
+    if (window.ethereum) {
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      if (chainId !== '0x13881') { // Mumbai Matic Testnet network ID
+         return window.confirm('WARNING: Metamask is not set to Matic Mumbai Testnet network!')
+      }
+    }
     const mintTransactionInfos = Array(AUTHORITY_NODES.length).fill(undefined);
     await Promise.all(
       AUTHORITY_NODES.map((x, i) => {
